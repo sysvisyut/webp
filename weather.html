@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>🌍 Weather & Time</h2>
+            <p id="real-time-clock"></p>
+            <h3>7-Day Forecast</h3>
+            <ul id="weekly-forecast"></ul>
+            <h3>Disaster Alerts</h3>
+            <p id="disaster-info">Checking...</p>
+        </div>
+        <div class="main-content">
+            <h1 class="title">🌍 Weather Forecast</h1>
+            <div class="search-container">
+                <input type="text" id="location-input" placeholder="Enter location...">
+                <button onclick="searchLocation()">🔍 Search</button>
+            </div>
+            <div id="globe-container"></div>
+            <div class="weather-info">
+                <h2 id="location-name"></h2>
+                <p id="temperature"></p>
+                <p id="description"></p>
+                <p id="forecast"></p>
+                <div id="weather-effect"></div>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffffff, #cccccc);
+            color: black;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+        }
+        .sidebar {
+            width: 300px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border-right: 2px solid black;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            text-align: center;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        input {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            width: 70%;
+            outline: none;
+            font-size: 16px;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #000000;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #333333;
+        }
+        #globe-container {
+            width: 600px;
+            height: 600px;
+            margin: 20px auto;
+        }
+        .weather-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        #weather-effect {
+            font-size: 50px;
+            margin-top: 10px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+    
+    <script>
+        function createGlobe() {
+            const globe = Globe()
+                .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+                .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+                .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png');
+            
+            const container = document.getElementById("globe-container");
+            globe(container);
+            window.globe = globe;
+        }
+        
+        function searchLocation() {
+            let location = document.getElementById("location-input").value;
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const lat = parseFloat(data[0].lat);
+                        const lon = parseFloat(data[0].lon);
+                        getWeather(lat, lon);
+                        getDisasterInfo(lat, lon);
+                        rotateGlobeTo(lat, lon);
+                    }
+                });
+        }
+        
+        function getWeather(lat, lon) {
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=YOUR_OPENWEATHER_API_KEY&units=metric`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("location-name").textContent = data.name;
+                    document.getElementById("temperature").textContent = `🌡️ Temperature: ${data.main.temp}°C`;
+                    document.getElementById("description").textContent = data.weather[0].description;
+                    updateWeatherEffect(data.weather[0].main);
+                });
+        }
+        
+        function getDisasterInfo(lat, lon) {
+            document.getElementById("disaster-info").textContent = "No disasters detected";
+        }
+        
+        function rotateGlobeTo(lat, lon) {
+            window.globe.pointOfView({ lat, lng: lon, altitude: 0.3 }, 2000);
+        }
+        
+        function updateWeatherEffect(weather) {
+            const effect = document.getElementById("weather-effect");
+            effect.textContent = weather === "Clear" ? "☀️ Sunny" : weather === "Rain" ? "🌧️ Raining" : "🌤️ Unknown";
+        }
+        
+        function updateClock() {
+            document.getElementById("real-time-clock").textContent = new Date().toLocaleTimeString();
+        }
+        
+        setInterval(updateClock, 1000);
+        
+        window.onload = createGlobe;
+    </script>
+</body>
+</html>
