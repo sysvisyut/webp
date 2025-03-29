@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBRqK0e-Fiw0QGpl0UUBAlPsvXqz5cyKM" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
@@ -22,8 +23,9 @@
         <div class="main-content">
             <h1 class="title">🌍 Weather Forecast</h1>
             <div class="search-container">
-                <input type="text" id="location-input" placeholder="Enter location...">
+                <input type="text" id="location-input" placeholder="Enter location..." oninput="searchLocation()">
                 <button onclick="searchLocation()">🔍 Search</button>
+                <div id="suggestions-container" class="suggestions"></div>
             </div>
             <div id="globe-container"></div>
             <div class="weather-info">
@@ -35,7 +37,6 @@
             </div>
         </div>
     </div>
-    
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -110,39 +111,87 @@
             margin-top: 10px;
             animation: fadeIn 1s ease-in-out;
         }
+        .suggestions {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            width: 70%;
+            z-index: 10;
+        }
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        .suggestion-item:hover {
+            background: #f0f0f0;
+        }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
     </style>
-    
     <script>
         function createGlobe() {
             const globe = Globe()
                 .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
                 .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
                 .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png');
-            
             const container = document.getElementById("globe-container");
             globe(container);
             window.globe = globe;
         }
-        
+        function initAutocomplete() {
+            const input = document.getElementById("location-input");
+            const autocomplete = new google.maps.places.Autocomplete(input, {
+                types: ["(cities)"],
+                fields: ["geometry", "name"],
+            });
+            autocomplete.addListener("place_changed", () => {
+                const place = autocomplete.getPlace();
+                if (place.geometry) {
+                    const lat = place.geometry.location.lat();
+                    const lon = place.geometry.location.lng();
+                    getWeather(lat, lon);
+                    getDisasterInfo(lat, lon);
+                    rotateGlobeTo(lat, lon);
+                }
+            });
+        }
         function searchLocation() {
             let location = document.getElementById("location-input").value;
+            let suggestionsContainer = document.getElementById("suggestions-container");
+            if (location.length < 2) {
+                suggestionsContainer.innerHTML = "";
+                return;
+            }
             fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.length > 0) {
-                        const lat = parseFloat(data[0].lat);
-                        const lon = parseFloat(data[0].lon);
-                        getWeather(lat, lon);
-                        getDisasterInfo(lat, lon);
-                        rotateGlobeTo(lat, lon);
+                    suggestionsContainer.innerHTML = "";
+                    if (data.length === 0) {
+                        suggestionsContainer.innerHTML = "<p>No results found</p>";
+                        return;
                     }
+                    data.forEach(item => {
+                        let suggestion = document.createElement("div");
+                        suggestion.className = "suggestion-item";
+                        suggestion.textContent = item.display_name;
+                        suggestion.onclick = function () {
+                            document.getElementById("location-input").value = item.display_name;
+                            suggestionsContainer.innerHTML = "";
+                            const lat = parseFloat(item.lat);
+                            const lon = parseFloat(item.lon);
+                            getWeather(lat, lon);
+                            getDisasterInfo(lat, lon);
+                            rotateGlobeTo(lat, lon);
+                        };
+                        suggestionsContainer.appendChild(suggestion);
+                    });
                 });
         }
-        
         function getWeather(lat, lon) {
             fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=YOUR_OPENWEATHER_API_KEY&units=metric`)
                 .then(response => response.json())
@@ -153,27 +202,25 @@
                     updateWeatherEffect(data.weather[0].main);
                 });
         }
-        
         function getDisasterInfo(lat, lon) {
             document.getElementById("disaster-info").textContent = "No disasters detected";
         }
-        
         function rotateGlobeTo(lat, lon) {
             window.globe.pointOfView({ lat, lng: lon, altitude: 0.3 }, 2000);
         }
-        
         function updateWeatherEffect(weather) {
             const effect = document.getElementById("weather-effect");
             effect.textContent = weather === "Clear" ? "☀️ Sunny" : weather === "Rain" ? "🌧️ Raining" : "🌤️ Unknown";
         }
-        
         function updateClock() {
             document.getElementById("real-time-clock").textContent = new Date().toLocaleTimeString();
         }
-        
         setInterval(updateClock, 1000);
-        
-        window.onload = createGlobe;
+        window.onload = function () {
+            createGlobe();
+            initAutocomplete();
+        };
     </script>
 </body>
 </html>
+
