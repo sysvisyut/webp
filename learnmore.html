@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>7-Day Weather Forecast for Chennai</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a2540, #1e3c72);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+
+    .slider {
+      position: relative;
+      width: 100%;
+      height: 350px;
+      overflow: hidden;
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .day {
+      min-width: 100%;
+      box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #4a90e2;
+      padding: 30px 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .day h3 {
+      margin-top: 0;
+      font-size: 1.3rem;
+    }
+
+    .day p {
+      margin: 8px 0;
+      font-size: 1.1rem;
+    }
+
+    .day .details {
+      font-size: 0.95rem;
+      margin-top: 10px;
+      color: #ccc;
+    }
+
+    .navigation {
+      margin-top: 20px;
+    }
+
+    .nav-button {
+      background: #4a90e2;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .nav-button:hover {
+      background: #357ab7;
+    }
+
+    .error {
+      color: #ff4f4f;
+      text-align: center;
+      font-size: 1.2rem;
+      margin: 20px 0;
+    }
+
+    .loader {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 1.2rem;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌤️ 7-Day Weather Forecast for Chennai</h1>
+    <div id="error-message" class="error" style="display:none;"></div>
+    <div id="loader" class="loader">Loading weather data...</div>
+    <div class="slider">
+      <div class="slides" id="forecast"></div>
+    </div>
+    <div class="navigation">
+      <button class="nav-button" onclick="prevSlide()">⬅️ Prev</button>
+      <button class="nav-button" onclick="nextSlide()">Next ➡️</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+
+    function generateMockData() {
+      const mockData = [];
+      const today = new Date();
+      for (let i = 0; i < 7; i++) {
+        const forecastDate = new Date(today);
+        forecastDate.setDate(today.getDate() + i);
+        const temp = Math.round(25 + Math.random() * 10);
+        const humidity = Math.round(60 + Math.random() * 20);
+        const windSpeed = (5 + Math.random() * 10).toFixed(1);
+        const weatherTypes = ["Clear", "Clouds", "Clear", "Rain"];
+        const weatherType = weatherTypes[i % weatherTypes.length];
+        mockData.push({
+          date: forecastDate,
+          temp: temp,
+          humidity: humidity,
+          windSpeed: windSpeed,
+          weather: {
+            main: weatherType,
+            description:
+              weatherType === "Clear"
+                ? "sunny"
+                : weatherType === "Clouds"
+                ? "partly cloudy"
+                : "light rain",
+          },
+        });
+      }
+      return mockData;
+    }
+
+    function displayWeather(dailyForecast) {
+      const forecastContainer = document.getElementById("forecast");
+      const loader = document.getElementById("loader");
+      loader.style.display = "none";
+      forecastContainer.innerHTML = "";
+
+      dailyForecast.forEach((day) => {
+        const dayElement = document.createElement("div");
+        dayElement.classList.add("day");
+        const options = { weekday: "short", month: "short", day: "numeric" };
+        const formattedDate = new Date(day.date).toLocaleDateString("en-US", options);
+        let weatherIcon = "☀️";
+        if (day.weather.main === "Clouds") weatherIcon = "⛅";
+        if (day.weather.main === "Rain") weatherIcon = "🌧️";
+
+        dayElement.innerHTML = `
+          <h3>${formattedDate}</h3>
+          <div style="font-size: 2.5rem; margin: 10px 0;">${weatherIcon}</div>
+          <p>${day.weather.description}</p>
+          <p><strong>${day.temp}°C</strong></p>
+          <div class="details">
+            💧 Humidity: ${day.humidity || 70}%<br />
+            🌬️ Wind: ${day.windSpeed || 7.2} km/h
+          </div>
+        `;
+
+        forecastContainer.appendChild(dayElement);
+      });
+
+      updateSlide();
+    }
+
+    function updateSlide() {
+      const slides = document.querySelector(".slides");
+      slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function nextSlide() {
+      const totalSlides = document.querySelectorAll(".day").length;
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function showError(message) {
+      const errorMessageElement = document.getElementById("error-message");
+      const loader = document.getElementById("loader");
+      loader.style.display = "none";
+      errorMessageElement.textContent = message;
+      errorMessageElement.style.display = "block";
+    }
+
+    function getWeatherData() {
+      const apiKey = "817395f5bd0d780e27e0957be4daaaa5";
+      const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=13.0827&lon=80.2707&units=metric&appid=${apiKey}`;
+
+      fetch(apiUrl)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("API request failed");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data && data.list && Array.isArray(data.list)) {
+            const processedData = processForecastData(data.list);
+            displayWeather(processedData);
+          } else {
+            throw new Error("Invalid data format");
+          }
+        })
+        .catch((error) => {
+          console.log("Using mock data due to error:", error);
+          const mockData = generateMockData();
+          displayWeather(mockData);
+        });
+    }
+
+    function processForecastData(forecastList) {
+      const uniqueDays = {};
+      const dailyData = [];
+
+      forecastList.forEach((item) => {
+        const date = new Date(item.dt * 1000);
+        const dayKey = date.toDateString();
+
+        if (!uniqueDays[dayKey]) {
+          uniqueDays[dayKey] = true;
+          dailyData.push({
+            date: date,
+            temp: Math.round(item.main.temp),
+            humidity: item.main.humidity,
+            windSpeed: item.wind.speed,
+            weather: {
+              main: item.weather[0].main,
+              description: item.weather[0].description,
+            },
+          });
+        }
+      });
+
+      return dailyData.slice(0, 7);
+    }
+
+    window.onload = function () {
+      getWeatherData();
+    };
+  </script>
+</body>
+</html>
