@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!--maps-AIzaSyBBRqK0e-Fiw0QGpl0UUBAlPsvXqz5cyKM-->
-    <!--openweather--->
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Weather Forecast</title>
-    <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=KEYY" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=keyy" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
@@ -18,28 +14,33 @@
         <div class="sidebar">
             <h2>🌍 Weather & Time</h2>
             <p id="real-time-clock"></p>
-            <h3>7-Day Forecast</h3>
+
+            <div class="weather-info">
+                <h3>📍 Location</h3>
+                <p id="location-name">-</p>
+                <p id="temperature">-</p>
+                <p id="description">-</p>
+                <div id="weather-effect">-</div>
+            </div>
+
+            <h3>🗓️ 7-Day Forecast</h3>
             <ul id="weekly-forecast"></ul>
-            <h3>Disaster Alerts</h3>
+
+            <h3>⚠️ Disaster Alerts</h3>
             <p id="disaster-info">Checking...</p>
         </div>
+
         <div class="main-content">
             <h1 class="title">🌍 Weather Forecast</h1>
             <div class="search-container">
-                <input type="text" id="location-input" placeholder="Enter location..." oninput="searchLocation()">
+                <input type="text" id="location-input" placeholder="Enter location..." oninput="searchLocation()" />
                 <button onclick="searchLocation()">🔍 Search</button>
                 <div id="suggestions-container" class="suggestions"></div>
             </div>
             <div id="globe-container"></div>
-            <div class="weather-info">
-                <h2 id="location-name"></h2>
-                <p id="temperature"></p>
-                <p id="description"></p>
-                <p id="forecast"></p>
-                <div id="weather-effect"></div>
-            </div>
         </div>
     </div>
+
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -61,6 +62,7 @@
             background: rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
             border-right: 2px solid black;
+            overflow-y: auto;
         }
         .main-content {
             flex-grow: 1;
@@ -105,14 +107,14 @@
         }
         .weather-info {
             margin-top: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.3);
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.4);
             border-radius: 10px;
+            animation: fadeIn 1s ease-in-out;
         }
         #weather-effect {
-            font-size: 50px;
+            font-size: 30px;
             margin-top: 10px;
-            animation: fadeIn 1s ease-in-out;
         }
         .suggestions {
             position: absolute;
@@ -136,6 +138,7 @@
             to { opacity: 1; }
         }
     </style>
+
     <script>
         function createGlobe() {
             const globe = Globe()
@@ -146,6 +149,7 @@
             globe(container);
             window.globe = globe;
         }
+
         function initAutocomplete() {
             const input = document.getElementById("location-input");
             const autocomplete = new google.maps.places.Autocomplete(input, {
@@ -163,6 +167,7 @@
                 }
             });
         }
+
         function searchLocation() {
             let location = document.getElementById("location-input").value;
             let suggestionsContainer = document.getElementById("suggestions-container");
@@ -195,8 +200,9 @@
                     });
                 });
         }
+
         function getWeather(lat, lon) {
-            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=YOUR_OPENWEATHER_API_KEY&units=metric`)
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=key`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById("location-name").textContent = data.name;
@@ -205,20 +211,29 @@
                     updateWeatherEffect(data.weather[0].main);
                 });
         }
+
         function getDisasterInfo(lat, lon) {
             document.getElementById("disaster-info").textContent = "No disasters detected";
         }
+
         function rotateGlobeTo(lat, lon) {
             window.globe.pointOfView({ lat, lng: lon, altitude: 0.3 }, 2000);
         }
+
         function updateWeatherEffect(weather) {
             const effect = document.getElementById("weather-effect");
-            effect.textContent = weather === "Clear" ? "☀️ Sunny" : weather === "Rain" ? "🌧️ Raining" : "🌤️ Unknown";
+            effect.textContent = weather === "Clear" ? "☀️ Sunny" :
+                weather === "Rain" ? "🌧️ Raining" :
+                weather === "Snow" ? "❄️ Snowing" :
+                weather === "Clouds" ? "☁️ Cloudy" : "🌤️ Weather";
         }
+
         function updateClock() {
             document.getElementById("real-time-clock").textContent = new Date().toLocaleTimeString();
         }
+
         setInterval(updateClock, 1000);
+
         window.onload = function () {
             createGlobe();
             initAutocomplete();
@@ -226,4 +241,3 @@
     </script>
 </body>
 </html>
-
