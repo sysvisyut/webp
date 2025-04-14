@@ -1,85 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Disaster Safety Tips</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #e0f7fa, #ffffff);
-            color: #333;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .disaster-section {
-            background: #ffffffcc;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 10px #ccc;
-        }
-        h2 {
-            margin-top: 0;
-        }
-        ul {
-            padding-left: 20px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Disaster Safety Tips</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0a2540, #1e3c72);
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+
+    .disaster-section {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #4a90e2;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px auto;
+      max-width: 800px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease, background 0.3s ease;
+      position: relative;
+    }
+
+    .disaster-section.active {
+      transform: scale(1.03);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    h2 {
+      margin: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .extra-info {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .disaster-section.active .extra-info {
+      display: block;
+    }
+
+    .learn-more {
+      background-color: #4a90e2;
+      border: none;
+      padding: 8px 14px;
+      color: #fff;
+      font-size: 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: none;
+    }
+
+    .disaster-section.active .close-btn {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-    <h1>🛡️ Common Safety Measures for Natural Disasters</h1>
+  <h1>🛡️ Safety Measures for Natural Disasters</h1>
 
-    <div class="disaster-section">
-        <h2>🌪️ Cyclones</h2>
+  <div class="disaster-section" onclick="toggleSection(event, this)">
+    <h2>🌪️ Cyclones</h2>
+    <ul>
+      <li>Secure windows and doors.</li>
+      <li>Stay indoors during the storm.</li>
+    </ul>
+    <button class="learn-more">Learn More</button>
+    <button class="close-btn">X</button>
+    <div class="extra-info">
         <ul>
-            <li>Secure windows and doors with shutters.</li>
-            <li>Stay indoors during the storm.</li>
-            <li>Keep emergency kits and battery-powered radios.</li>
-            <li>Evacuate if advised by authorities.</li>
+          <li>Charge devices and have emergency numbers ready.</li>
+          <li>Keep emergency food, water, and blankets ready.</li>
+          <li>Evacuate early if advised by authorities.</li>
+          <li>Secure loose outdoor items like garbage cans and furniture.</li>
+          <li>Monitor official weather channels for updates.</li>
         </ul>
-    </div>
+      </div>
+  </div>
 
-    <div class="disaster-section">
-        <h2>🌊 Floods</h2>
+  <div class="disaster-section" onclick="toggleSection(event, this)">
+    <h2>🌊 Floods</h2>
+    <ul>
+      <li>Move to higher ground immediately.</li>
+      <li>Unplug electrical appliances.</li>
+    </ul>
+    <button class="learn-more">Learn More</button>
+    <button class="close-btn">X</button>
+    <div class="extra-info">
         <ul>
-            <li>Move to higher ground immediately.</li>
-            <li>Avoid walking or driving through floodwaters.</li>
-            <li>Unplug electrical appliances to prevent shock.</li>
-            <li>Store drinking water in clean containers.</li>
+          <li>Never drive or walk through floodwaters.</li>
+          <li>Keep essential supplies in a waterproof bag.</li>
+          <li>Turn off gas lines before leaving home.</li>
+          <li>Check local alerts for evacuation routes.</li>
+          <li>Avoid contact with floodwater due to contamination risks.</li>
         </ul>
-    </div>
+      </div>
+  </div>
 
-    <div class="disaster-section">
-        <h2>🔥 Heatwaves</h2>
+  <div class="disaster-section" onclick="toggleSection(event, this)">
+    <h2>🔥 Heatwaves</h2>
+    <ul>
+      <li>Stay hydrated and avoid peak heat hours.</li>
+      <li>Wear light clothing.</li>
+    </ul>
+    <button class="learn-more">Learn More</button>
+    <button class="close-btn">X</button>
+    <div class="extra-info">
         <ul>
-            <li>Stay hydrated and avoid outdoor activities during peak heat hours.</li>
-            <li>Wear light-colored, loose-fitting clothes.</li>
-            <li>Keep living spaces cool with fans or air conditioning.</li>
+          <li>Use fans and air conditioning.</li>
+          <li>Check on elderly or vulnerable people.</li>
+          <li>Limit outdoor activity during peak sun.</li>
+          <li>Eat smaller, lighter meals.</li>
+          <li>Wear sunscreen to protect from UV exposure.</li>
         </ul>
-    </div>
+      </div>
+  </div>
 
-    <div class="disaster-section">
-        <h2>🌍 Earthquakes</h2>
+  <div class="disaster-section" onclick="toggleSection(event, this)">
+    <h2>🌍 Earthquakes</h2>
+    <ul>
+      <li>Drop, cover, and hold on.</li>
+      <li>Stay away from windows.</li>
+    </ul>
+    <button class="learn-more">Learn More</button>
+    <button class="close-btn">X</button>
+    <div class="extra-info">
         <ul>
-            <li>Drop, cover, and hold on during shaking.</li>
-            <li>Stay away from windows and heavy furniture.</li>
-            <li>Have an emergency go-bag ready.</li>
-            <li>Do not use elevators after a quake.</li>
+          <li>Have a go-bag with essentials.</li>
+          <li>Don’t use elevators after shaking stops.</li>
+          <li>Check gas lines for leaks before using fire.</li>
+          <li>Practice earthquake drills with your family.</li>
+          <li>Secure heavy furniture to walls to prevent toppling.</li>
         </ul>
-    </div>
+      </div>
+  </div>
 
-    <div class="disaster-section">
-        <h2>🔥 Wildfires</h2>
+  <div class="disaster-section" onclick="toggleSection(event, this)">
+    <h2>🔥 Wildfires</h2>
+    <ul>
+      <li>Clear dry vegetation around home.</li>
+      <li>Seal windows and doors.</li>
+    </ul>
+    <button class="learn-more">Learn More</button>
+    <button class="close-btn">X</button>
+    <div class="extra-info">
         <ul>
-            <li>Clear dry vegetation around your home.</li>
-            <li>Stay indoors if air quality is poor.</li>
-            <li>Follow local evacuation orders immediately.</li>
+          <li>Evacuate when told by officials.</li>
+          <li>Keep emergency kit and N95 masks ready.</li>
+          <li>Use fire-resistant building materials.</li>
+          <li>Keep vehicles fueled for a quick escape.</li>
+          <li>Follow fire perimeter maps from local authorities.</li>
         </ul>
-    </div>
+      </div>
+  </div>
+
+  <div class="disaster-section" onclick="toggleSection(event, this)">
+    <h2>🌋 Volcanic Eruptions</h2>
+    <ul>
+      <li>Evacuate when advised.</li>
+      <li>Use masks to avoid inhaling ash.</li>
+    </ul>
+    <button class="learn-more">Learn More</button>
+    <button class="close-btn">X</button>
+    <div class="extra-info">
+        <ul>
+          <li>Stay indoors during ashfall.</li>
+          <li>Keep goggles and dust masks ready.</li>
+          <li>Clean ash from roofs and gutters regularly.</li>
+          <li>Keep emergency contact numbers of local shelters.</li>
+          <li>Seal windows and vents to prevent ash entry.</li>
+        </ul>
+      </div>
+  </div>
+
+  <div class="disaster-section" onclick="toggleSection(event, this)">
+    <h2>❄️ Snowstorms</h2>
+    <ul>
+      <li>Stay indoors and keep warm.</li>
+      <li>Stock up on food and water.</li>
+    </ul>
+    <button class="learn-more">Learn More</button>
+    <button class="close-btn">X</button>
+    <div class="extra-info">
+        <ul>
+          <li>Keep pipes from freezing by letting faucets drip.</li>
+          <li>Keep extra blankets and winter clothing ready.</li>
+          <li>Charge power banks in case of power outages.</li>
+          <li>Keep rock salt or sand for melting ice.</li>
+          <li>Avoid travel unless absolutely necessary.</li>
+        </ul>
+      </div>
+  </div>
+
+  <div class="disaster-section" onclick="toggleSection(event, this)">
+    <h2>🌬️ Tornadoes</h2>
+    <ul>
+      <li>Seek shelter in a basement or interior room.</li>
+      <li>Avoid windows and exterior walls.</li>
+    </ul>
+    <button class="learn-more">Learn More</button>
+    <button class="close-btn">X</button>
+    <div class="extra-info">
+        <ul>
+          <li>Cover yourself with a mattress or heavy blankets.</li>
+          <li>Have a whistle in case you’re trapped.</li>
+          <li>Listen to NOAA weather radio or alerts.</li>
+          <li>Identify a safe room or storm shelter in advance.</li>
+          <li>Wear a helmet to protect your head.</li>
+        </ul>
+      </div>
+  </div>
+
+  <div class="disaster-section" onclick="toggleSection(event, this)">
+    <h2>🌫️ Dust Storms</h2>
+    <ul>
+      <li>Stay indoors with windows closed.</li>
+      <li>Wear goggles and masks if outside.</li>
+    </ul>
+    <button class="learn-more">Learn More</button>
+    <button class="close-btn">X</button>
+    <div class="extra-info">
+        <ul>
+          <li>Turn off HVAC systems to avoid bringing in dust.</li>
+          <li>Keep wet towels near doors to block gaps.</li>
+          <li>Wait for dust to settle before going out again.</li>
+          <li>Cover electronics to prevent dust damage.</li>
+          <li>Drive slowly and use headlights if caught outside.</li>
+        </ul>
+      </div>
+  </div>
+
+  <script>
+    function toggleSection(event, section) {
+      event.stopPropagation();
+
+      if (event.target.classList.contains("close-btn")) {
+        section.classList.remove("active");
+        return;
+      }
+
+      if (event.target.classList.contains("learn-more")) {
+        document.querySelectorAll(".disaster-section").forEach(el => {
+          if (el !== section) el.classList.remove("active");
+        });
+        section.classList.toggle("active");
+      }
+    }
+
+    document.body.addEventListener("click", function () {
+      document.querySelectorAll(".disaster-section").forEach(section => {
+        section.classList.remove("active");
+      });
+    });
+  </script>
 </body>
 </html>
