@@ -1,112 +1,165 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Aganilai - Weather App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    .navbar {
+      background-color: #007bff;
+    }
 
-    <title>interface page</title>
-    <style>
-        .jumbotron{
-            background-image:url(blue_bg.jpg);
-            text-align: center;
-            margin-top: 50px;
-        }
-        .container{
-            text-align: center;
-        }
-        .card-deck{
-            margin-left: 145px;
-            padding-top: 20px;
-        }
+    .navbar .nav-link,
+    .navbar .navbar-brand {
+      color: white !important;
+    }
 
-       
-    </style>
+    .jumbotron {
+      background-image: url('blue_bg.jpg');
+      background-size: cover;
+      background-position: center;
+      color: rgb(18, 57, 212);
+      text-align: center;
+      padding: 100px 30px;
+      margin-top: 20px;
+      border-radius: 1rem;
+    }
 
-  </head>
-  <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">My App</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-              </li>
-              
-              <li class="nav-item">
-                <a class="nav-link disabled" aria-disabled="true">Download my App</a>
-              </li>
-            </ul>
-            <form class="form-inline my 2 my-lg-0">
-              <input class="form-control me-2" type="email" placeholder="Email" aria-label="Email">
-              <input class="form-control me-2" type="password" placeholder="password" aria-label="password">
-              <button class="btn btn-outline-success" type="submit">Login</button>
-            </form>
+    .jumbotron h1 {
+      font-weight: bold;
+    }
+
+    .container h1 {
+      margin-top: 40px;
+      font-weight: 600;
+    }
+
+    .card-deck {
+      padding: 40px 15px;
+    }
+
+    .card {
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 1rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .card-img-top {
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">My App</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+          <li class="nav-item"><a class="nav-link disabled" href="#">Download App</a></li>
+        </ul>
+        <form class="form-inline">
+          <input class="form-control mr-2" type="email" placeholder="Email">
+          <input class="form-control mr-2" type="password" placeholder="Password">
+          <button class="btn btn-light" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="jumbotron">
+    <h1 class="display-4">Aganilai - Not your ordinary weather app</h1>
+    <p class="lead">Stay ahead of natural threats with real-time disaster alerts and weather insights.</p>
+    <a class="btn btn-light btn-lg mt-4" href="#" role="button">Learn more</a>
+  </div>
+
+  <div class="container text-center">
+    <h1>Disaster Alerts</h1>
+    <p class="lead">Explore our features</p>
+  </div>
+
+  <div class="container py-5 d-flex justify-content-center">
+    <div class="row justify-content-center">
+      <div class="col-md-4 d-flex justify-content-center mb-4">
+        <div class="card" id="card1" style="width: 18rem;">
+          <img class="card-img-top" src="logo1.jpg" alt="Home Page">
+          <div class="card-body">
+            <h5 class="card-title">Home Page</h5>
+            <p class="card-text">Explore our homepage for live weather updates and warnings.</p>
+            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
           </div>
         </div>
-      </nav>
-      <div class="jumbotron">
-        <h1 class="display-4">Aganilai-Not your odinary wheather app</h1>
-        <p class="lead"></p>
-        <hr class="my-4">
-        <p></p>
-        <p class="lead">
-          <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-        </p>
       </div>
-      <div class="container">
-        <h1>Disaster alerts!</h1>
-        <p>Know your thread now</p>
-
+      <div class="col-md-4 d-flex justify-content-center mb-4">
+        <div class="card" id="card2" style="width: 18rem;">
+          <img class="card-img-top" src="logo2.jpg" alt="Page 2">
+          <div class="card-body">
+            <h5 class="card-title">Safety Measures</h5>
+            <p class="card-text">Detailed safety measures against disasters</p>
+            <p class="card-text"><small class="text-muted">Last updated 5 mins ago</small></p>
+          </div>
+        </div>
       </div>
-      <div class="card-deck container">
-        <div class="card" id="card1">
-            <img class="card-img-top" src="home.jpeg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Home Page</h5>
-                <p class="card-text"></p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
+      <div class="col-md-4 d-flex justify-content-center mb-4">
+        <div class="card" id="card3" style="width: 18rem;">
+          <img class="card-img-top" src="logo3.png" alt="Page 3">
+          <div class="card-body">
+            <h5 class="card-title">SOS</h5>
+            <p class="card-text">Emergency contacts, tips and community resources.</p>
+            <p class="card-text"><small class="text-muted">Last updated 10 mins ago</small></p>
+          </div>
         </div>
-        <div class="card">
-            <img class="card-img-top" src="card.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Page 2</h5>
-                <p class="card-text"></p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-        <div class="card">
-            <img class="card-img-top" src="card.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">Page 3</h5>
-                <p class="card-text"></p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
+      </div>
     </div>
-    
-    <script>
-        document.getElementById("card1").addEventListener("click", function() {
-            window.location.href = "wheatherproject.html";
-        });
-    </script>
-    
-    
+  </div>
+  
 
-    
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  </body>
+  <footer>
+    <p>&copy; 2025 Aganilai. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById("card1").addEventListener("click", function () {
+      window.location.href = "weather.html";
+    });
+
+    document.getElementById("card2").addEventListener("click", function () {
+      window.location.href = "page2.html";
+    });
+
+    document.getElementById("card3").addEventListener("click", function () {
+      window.location.href = "page3.html";
+    });
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+</body>
 </html>
